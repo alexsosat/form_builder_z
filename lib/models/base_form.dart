@@ -1,5 +1,3 @@
-// ignore_for_file: prefer-moving-to-variable
-
 import "package:flutter/material.dart";
 import "package:flutter_form_builder/flutter_form_builder.dart";
 import "package:formz/formz.dart";
