@@ -1,9 +1,9 @@
 import "package:form_builder_validators/form_builder_validators.dart";
 
-import "../models/base_input.dart";
+import "../models/input_entity.dart";
 
 /// Input that handles a boolean (checkbox) input field
-class BoolInput extends BaseInput<bool> {
+class BoolInput extends InputEntity<bool> {
   const BoolInput.pure({
     required super.field,
   }) : super.pure(

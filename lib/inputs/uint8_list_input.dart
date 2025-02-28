@@ -2,11 +2,11 @@ import "dart:math";
 import "dart:typed_data";
 
 import "package:form_builder_validators/form_builder_validators.dart";
-import "package:form_builder_z/models/base_input.dart";
+import "package:form_builder_z/models/input_entity.dart";
 import "package:intl/intl.dart";
 
 /// Input for providing an image in [Uint8List] format
-class Uint8ListInput extends BaseInput<Uint8List?> {
+class Uint8ListInput extends InputEntity<Uint8List?> {
   /// Call super.pure to represent an unmodified form input.
   const Uint8ListInput.pure({
     required super.field,

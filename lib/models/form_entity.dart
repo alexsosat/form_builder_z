@@ -2,19 +2,19 @@ import "package:flutter/material.dart";
 import "package:flutter_form_builder/flutter_form_builder.dart";
 import "package:formz/formz.dart";
 
-import "base_input.dart";
+import "input_entity.dart";
 
 /// Base class for all form classes
-abstract class BaseForm with FormzMixin {
+abstract class FormEntity with FormzMixin {
   /// Base class for all form classes
-  const BaseForm({this.formKey});
+  const FormEntity({this.formKey});
 
   /// Key to access the form state
   final GlobalKey<FormBuilderState>? formKey;
 
   /// Returns the inputs that are part of the form.
   @override
-  List<BaseInput> get inputs;
+  List<InputEntity> get inputs;
 
   /// Returns the values of the form as a map.
   Map<String, dynamic> get values {

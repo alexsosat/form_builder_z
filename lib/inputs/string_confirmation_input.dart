@@ -1,18 +1,18 @@
 import "package:form_builder_validators/form_builder_validators.dart";
 
-import "../models/base_input.dart";
+import "../models/input_entity.dart";
 
 /// Input for providing a text input field that needs to be confirmed in
 /// comparison to another text input field
-class ConfirmationInput extends BaseInput<String?> {
+class StringConfirmationInput extends InputEntity<String?> {
   /// Call super.pure to represent an unmodified form input.
-  const ConfirmationInput.pure({
+  const StringConfirmationInput.pure({
     required super.field,
     this.textToConfirm,
   }) : super.pure(value: null);
 
   /// Call super.dirty to represent a modified form input.
-  const ConfirmationInput.dirty({
+  const StringConfirmationInput.dirty({
     required super.value,
     required this.textToConfirm,
     required super.field,
@@ -31,11 +31,11 @@ class ConfirmationInput extends BaseInput<String?> {
       ).call(value);
 
   @override
-  BaseInput<String?> dirty({
+  InputEntity<String?> dirty({
     String? value,
     String? textToConfirm,
   }) =>
-      ConfirmationInput.dirty(
+      StringConfirmationInput.dirty(
         field: field,
         value: value,
         textToConfirm: textToConfirm ?? this.textToConfirm,

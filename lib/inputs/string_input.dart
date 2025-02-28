@@ -1,14 +1,14 @@
 import "package:form_builder_validators/form_builder_validators.dart";
-import "package:form_builder_z/models/base_input.dart";
+import "package:form_builder_z/models/input_entity.dart";
 
 /// Input for providing a text input field
-class TextInput extends BaseInput<String?> {
-  const TextInput.pure({
+class StringInput extends InputEntity<String?> {
+  const StringInput.pure({
     required super.field,
     required this.isRequired,
   }) : super.pure(value: null);
 
-  const TextInput.dirty({
+  const StringInput.dirty({
     required super.field,
     required super.value,
     required this.isRequired,
@@ -25,11 +25,11 @@ class TextInput extends BaseInput<String?> {
       ).call(value);
 
   @override
-  TextInput dirty({
+  StringInput dirty({
     String? value,
     bool? isRequired,
   }) =>
-      TextInput.dirty(
+      StringInput.dirty(
         field: field,
         value: value,
         isRequired: isRequired ?? this.isRequired,

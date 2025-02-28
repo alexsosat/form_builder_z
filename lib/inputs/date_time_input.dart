@@ -1,9 +1,9 @@
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../models/base_input.dart';
+import '../models/input_entity.dart';
 
 /// Input that handles a date time input field
-class DateTimeInput extends BaseInput<DateTime?> {
+class DateTimeInput extends InputEntity<DateTime?> {
   const DateTimeInput.pure({
     required super.field,
   }) : super.pure(

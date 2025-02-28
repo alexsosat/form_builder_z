@@ -1,9 +1,9 @@
 import "package:form_builder_validators/form_builder_validators.dart";
 
-import "../models/base_input.dart";
+import "../models/input_entity.dart";
 
 /// Input for providing an email input field
-class EmailInput extends BaseInput<String?> {
+class EmailInput extends InputEntity<String?> {
   const EmailInput.pure({
     required super.field,
     required this.isRequired,
