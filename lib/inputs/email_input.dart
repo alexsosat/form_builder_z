@@ -6,33 +6,31 @@ import "../models/input_entity.dart";
 class EmailInput extends InputEntity<String?> {
   const EmailInput.pure({
     required super.field,
-    required this.isRequired,
+    super.validators,
   }) : super.pure(value: null);
 
   const EmailInput.dirty({
     required super.value,
     required super.field,
-    required this.isRequired,
+    super.validators,
   }) : super.dirty();
-
-  /// True if the input is required
-  final bool isRequired;
-
-  @override
-  String? validator(String? value) => FormBuilderValidators.compose(
-        [
-          FormBuilderValidators.email(checkNullOrEmpty: isRequired),
-        ],
-      ).call(value);
 
   @override
   EmailInput dirty({
     String? value,
     bool? isRequired,
+    List<TranslatedValidator<String>>? validators,
   }) =>
       EmailInput.dirty(
         field: field,
         value: value,
-        isRequired: isRequired ?? this.isRequired,
+        validators: validators ?? this.validators,
       );
+
+  @override
+  String? validator(String? value) {
+    validators.add(EmailValidator());
+
+    return super.validator(value);
+  }
 }

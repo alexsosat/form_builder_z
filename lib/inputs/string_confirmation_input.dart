@@ -9,35 +9,38 @@ class StringConfirmationInput extends InputEntity<String?> {
   const StringConfirmationInput.pure({
     required super.field,
     this.textToConfirm,
+    super.validators,
   }) : super.pure(value: null);
 
   /// Call super.dirty to represent a modified form input.
   const StringConfirmationInput.dirty({
+    required super.field,
     required super.value,
     required this.textToConfirm,
-    required super.field,
+    super.validators,
   }) : super.dirty();
 
   /// Text to match the value of the input
   final String? textToConfirm;
 
-  // Override validator to handle validating a given input value.
-  @override
-  String? validator(String? value) => FormBuilderValidators.compose(
-        [
-          FormBuilderValidators.required(),
-          FormBuilderValidators.equal(textToConfirm ?? ""),
-        ],
-      ).call(value);
-
   @override
   InputEntity<String?> dirty({
     String? value,
     String? textToConfirm,
+    List<TranslatedValidator<String>>? validators,
   }) =>
       StringConfirmationInput.dirty(
         field: field,
         value: value,
         textToConfirm: textToConfirm ?? this.textToConfirm,
+        validators: validators ?? this.validators,
       );
+
+  // Override validator to handle validating a given input value.
+  @override
+  String? validator(String? value) {
+    validators.add(EqualValidator(textToConfirm ?? ""));
+
+    return super.validator(value);
+  }
 }
