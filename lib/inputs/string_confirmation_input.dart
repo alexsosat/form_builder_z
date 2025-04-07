@@ -24,7 +24,7 @@ class StringConfirmationInput extends InputEntity<String?> {
   final String? textToConfirm;
 
   @override
-  InputEntity<String?> dirty({
+  StringConfirmationInput dirty({
     String? value,
     String? textToConfirm,
     List<TranslatedValidator<String>>? validators,
