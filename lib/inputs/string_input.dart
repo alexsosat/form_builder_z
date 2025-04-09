@@ -6,13 +6,13 @@ import "../models/input_entity.dart";
 class StringInput extends InputEntity<String?> {
   const StringInput.pure({
     required super.field,
-    required super.validators,
+    super.validators,
   }) : super.pure(value: null);
 
   const StringInput.dirty({
     required super.field,
     required super.value,
-    required super.validators,
+    super.validators,
   }) : super.dirty();
 
   @override
