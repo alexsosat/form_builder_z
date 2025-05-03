@@ -6,7 +6,6 @@ import "../models/input_entity.dart";
 class BoolInput extends InputEntity<bool> {
   const BoolInput.pure({
     required super.field,
-    super.validators,
   }) : super.pure(
           value: false,
         );
@@ -15,17 +14,17 @@ class BoolInput extends InputEntity<bool> {
   const BoolInput.dirty({
     required super.field,
     required super.value,
-    super.validators,
+    required super.validators,
   }) : super.dirty();
 
   @override
   BoolInput dirty({
     bool? value,
-    List<TranslatedValidator<bool>>? validators,
+    required List<TranslatedValidator<bool>> validators,
   }) =>
       BoolInput.dirty(
         value: value ?? false,
         field: field,
-        validators: validators ?? this.validators,
+        validators: validators,
       );
 }

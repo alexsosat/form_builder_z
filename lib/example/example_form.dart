@@ -7,14 +7,10 @@ class ExampleForm extends FormEntity {
   ExampleForm({
     this.stringInput = const StringInput.pure(
       field: "text",
-      validators: [
-        RequiredValidator(),
-        MaxLengthValidator(8),
-      ],
     ),
   });
 
-  final StringInput stringInput;
+  StringInput stringInput;
 
   @override
   // TODO: implement inputs
@@ -22,6 +18,12 @@ class ExampleForm extends FormEntity {
 
   @override
   void save(Map<String, dynamic> fields) {
-    // TODO: implement save
+    stringInput = stringInput.dirty(
+      value: fields[stringInput.field],
+      validators: const [
+        RequiredValidator(),
+        MaxLengthValidator(8),
+      ],
+    );
   }
 }

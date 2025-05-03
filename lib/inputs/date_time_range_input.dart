@@ -7,24 +7,23 @@ import "../models/input_entity.dart";
 class DateTimeRangeInput extends InputEntity<DateTimeRange?> {
   const DateTimeRangeInput.pure({
     required super.field,
-    super.validators,
   }) : super.pure(value: null);
 
   const DateTimeRangeInput.dirty({
     required super.field,
     required super.value,
-    super.validators,
+    required super.validators,
   }) : super.dirty();
 
   @override
   DateTimeRangeInput dirty({
     DateTimeRange? value,
-    bool? isRequired,
-    List<TranslatedValidator<DateTimeRange>>? validators,
+    required List<TranslatedValidator<DateTimeRange?>> validators,
   }) =>
       DateTimeRangeInput.dirty(
         field: field,
         value: value,
-        validators: validators ?? this.validators,
+        // TODO: Add a const validators for date range
+        validators: validators,
       );
 }

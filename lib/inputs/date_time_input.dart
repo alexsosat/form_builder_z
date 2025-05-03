@@ -6,7 +6,6 @@ import '../models/input_entity.dart';
 class DateTimeInput extends InputEntity<DateTime?> {
   const DateTimeInput.pure({
     required super.field,
-    super.validators,
   }) : super.pure(
           value: null,
         );
@@ -14,24 +13,20 @@ class DateTimeInput extends InputEntity<DateTime?> {
   const DateTimeInput.dirty({
     required super.value,
     required super.field,
-    super.validators,
+    required super.validators,
   }) : super.dirty();
 
   @override
   DateTimeInput dirty({
     DateTime? value,
-    List<TranslatedValidator<DateTime>>? validators,
+    required List<TranslatedValidator<DateTime?>>? validators,
   }) =>
       DateTimeInput.dirty(
         field: field,
         value: value,
-        validators: validators ?? this.validators,
+        validators: validators ??
+            [
+              const DateTimeValidator(),
+            ],
       );
-
-  @override
-  String? validator(DateTime? value) {
-    validators.add(const DateTimeValidator());
-
-    return super.validator(value);
-  }
 }

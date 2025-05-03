@@ -6,23 +6,22 @@ import "../models/input_entity.dart";
 class StringInput extends InputEntity<String?> {
   const StringInput.pure({
     required super.field,
-    super.validators,
   }) : super.pure(value: null);
 
   const StringInput.dirty({
     required super.field,
     required super.value,
-    super.validators,
+    required super.validators,
   }) : super.dirty();
 
   @override
   StringInput dirty({
     String? value,
-    List<TranslatedValidator<String>>? validators,
+    required List<TranslatedValidator<String?>> validators,
   }) =>
       StringInput.dirty(
         field: field,
         value: value,
-        validators: validators ?? this.validators,
+        validators: validators,
       );
 }

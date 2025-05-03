@@ -13,7 +13,7 @@ abstract class InputEntity<T> extends FormzInput<T, String> {
   /// Constructor which create a dirty [FormzInput] with a given value
   const InputEntity.dirty({
     required this.field,
-    this.validators = const [],
+    required this.validators,
     required T value,
   }) : super.dirty(value);
 
@@ -25,7 +25,10 @@ abstract class InputEntity<T> extends FormzInput<T, String> {
 
   /// Function to set the value of the input and return a new instance of
   /// the input, setting the isPure flag to false
-  InputEntity<T> dirty({T? value});
+  InputEntity<T> dirty({
+    T? value,
+    required List<TranslatedValidator<T>> validators,
+  });
 
   @override
   String? validator(T value) {
