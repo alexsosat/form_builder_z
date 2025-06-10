@@ -1,6 +1,6 @@
 name: form_builder_z
 description: "A new Flutter package project."
-version: 0.0.5
+version: 0.0.6
 homepage: null
 
 environment:
@@ -10,8 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_form_builder: ^9.7.0
-  form_builder_validators: ^11.1.1
+  flutter_form_builder: ^10.0.1
+  form_builder_validators: ^11.1.2
   formz: ^0.8.0
   intl: any
 
