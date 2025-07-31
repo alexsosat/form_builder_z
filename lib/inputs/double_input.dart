@@ -11,7 +11,7 @@ class DoubleInput extends InputEntity<double?> {
   const DoubleInput.dirty({
     required super.field,
     required super.value,
-    required super.validators,
+    super.validators = const [],
   }) : super.dirty();
 
   @override

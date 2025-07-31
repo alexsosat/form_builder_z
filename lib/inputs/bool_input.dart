@@ -14,7 +14,7 @@ class BoolInput extends InputEntity<bool> {
   const BoolInput.dirty({
     required super.field,
     required super.value,
-    required super.validators,
+    super.validators = const [],
   }) : super.dirty();
 
   @override

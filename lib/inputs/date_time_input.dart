@@ -13,7 +13,7 @@ class DateTimeInput extends InputEntity<DateTime?> {
   const DateTimeInput.dirty({
     required super.value,
     required super.field,
-    required super.validators,
+    super.validators = const [],
   }) : super.dirty();
 
   @override

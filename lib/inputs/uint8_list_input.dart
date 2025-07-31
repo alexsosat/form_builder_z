@@ -15,7 +15,7 @@ class Uint8ListInput extends InputEntity<Uint8List?> {
   const Uint8ListInput.dirty({
     required super.field,
     required super.value,
-    required super.validators,
+    super.validators = const [],
   }) : super.dirty();
 
   @override
