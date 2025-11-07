@@ -17,7 +17,7 @@ import 'package:intl/intl.dart';
 /// - [checkNullOrEmpty] Whether to check if the value is null or empty.
 ///
 /// {@endtemplate}
-class FileSizeValidator extends TranslatedValidator<Uint8List> {
+class FileSizeValidator extends TranslatedValidator<Uint8List?> {
   /// Constructor for the file size validator.
   const FileSizeValidator(
     this.maxSize, {
@@ -41,7 +41,11 @@ class FileSizeValidator extends TranslatedValidator<Uint8List> {
       .fileSizeErrorText(formatBytes(0), formatBytes(maxSize));
 
   @override
-  String? validateValue(Uint8List valueCandidate) {
+  String? validateValue(Uint8List? valueCandidate) {
+    if (valueCandidate == null) {
+      return null;
+    }
+
     final int size = valueCandidate.lengthInBytes;
 
     if (size > maxSize) {
