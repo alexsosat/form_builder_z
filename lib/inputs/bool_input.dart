@@ -20,11 +20,11 @@ class BoolInput extends InputEntity<bool> {
   @override
   BoolInput dirty({
     bool? value,
-    required List<TranslatedValidator<bool>> validators,
+    List<TranslatedValidator<bool>>? validators,
   }) =>
       BoolInput.dirty(
         value: value ?? false,
         field: field,
-        validators: validators,
+        validators: validators ?? const [],
       );
 }

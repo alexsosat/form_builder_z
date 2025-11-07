@@ -1,16 +1,15 @@
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:form_builder_z/inputs/string_input.dart';
 import 'package:form_builder_z/models/form_entity.dart';
 import 'package:form_builder_z/models/input_entity.dart';
 
 class ExampleForm extends FormEntity {
   ExampleForm({
-    this.stringInput = const StringInput.pure(
+    this.stringInput = const InputEntity.pure(
       field: "text",
     ),
   });
 
-  StringInput stringInput;
+  InputEntity<String> stringInput;
 
   @override
   // TODO: implement inputs
