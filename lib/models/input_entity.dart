@@ -32,7 +32,7 @@ class InputEntity<T> extends FormzInput<T?, String> {
       InputEntity<T>.dirty(
         field: field,
         value: value,
-        validators: validators ?? const [],
+        validators: validators ?? this.validators,
       );
 
   @override

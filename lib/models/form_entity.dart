@@ -28,7 +28,13 @@ abstract class FormEntity with FormzMixin {
   }
 
   /// Method that maps the form fields to the respective input values.
-  void save(Map<String, dynamic> fields);
+  void save(Map<String, dynamic> fields) {
+    for (var input in inputs) {
+      input = input.dirty(
+        value: fields[input.field],
+      );
+    }
+  }
 
   /// Validates the form
   ///
