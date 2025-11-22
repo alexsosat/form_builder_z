@@ -17,7 +17,7 @@ class DoubleInput extends InputEntity<double?> {
   @override
   DoubleInput dirty({
     double? value,
-    List<TranslatedValidator<double?>>? validators,
+    List<BaseValidator<double?>>? validators,
   }) =>
       DoubleInput.dirty(
         field: field,

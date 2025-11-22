@@ -18,7 +18,7 @@ class DateTimeRangeInput extends InputEntity<DateTimeRange?> {
   @override
   DateTimeRangeInput dirty({
     DateTimeRange? value,
-    List<TranslatedValidator<DateTimeRange?>>? validators,
+    List<BaseValidator<DateTimeRange?>>? validators,
   }) =>
       DateTimeRangeInput.dirty(
         field: field,

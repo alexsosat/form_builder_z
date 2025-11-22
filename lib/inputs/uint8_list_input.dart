@@ -21,7 +21,7 @@ class Uint8ListInput extends InputEntity<Uint8List?> {
   @override
   Uint8ListInput dirty({
     Uint8List? value,
-    List<TranslatedValidator<Uint8List?>>? validators,
+    List<BaseValidator<Uint8List?>>? validators,
   }) =>
       Uint8ListInput.dirty(
         field: field,
