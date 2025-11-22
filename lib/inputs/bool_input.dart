@@ -20,7 +20,7 @@ class BoolInput extends InputEntity<bool> {
   @override
   BoolInput dirty({
     bool? value,
-    List<TranslatedValidator<bool?>>? validators,
+    List<BaseValidator<bool?>>? validators,
   }) =>
       BoolInput.dirty(
         value: value ?? false,

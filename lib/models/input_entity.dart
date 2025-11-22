@@ -21,13 +21,13 @@ class InputEntity<T> extends FormzInput<T?, String> {
   final String field;
 
   /// Active validators for the input
-  final List<TranslatedValidator<T?>> validators;
+  final List<BaseValidator<T?>> validators;
 
   /// Function to set the value of the input and return a new instance of
   /// the input, setting the isPure flag to false
   InputEntity<T> dirty({
     required T? value,
-    List<TranslatedValidator<T?>>? validators,
+    List<BaseValidator<T?>>? validators,
   }) =>
       InputEntity<T>.dirty(
         field: field,
