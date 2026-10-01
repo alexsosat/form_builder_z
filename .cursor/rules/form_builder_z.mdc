@@ -1,0 +1,198 @@
+---
+description: Guidelines for implementing form validation and state management using the form_builder_z package.
+globs: "**/*.dart"
+alwaysApply: false
+---
+
+# Form Builder Z (form_builder_z) Usage Guidelines
+
+This rule provides instructions and patterns for implementing forms using the `form_builder_z` package, which integrates `formz` and `flutter_form_builder` for type-safe, declarative forms.
+
+## Core Concepts & Classes
+
+1. **`FormEntity`**: The base class for forms. It implements `FormzMixin` to track form validity and coordinate fields.
+2. **`InputEntity<T>`**: The base representation of a form field with a specific type `T` (e.g., `String`, `double`, `bool`, `DateTime`).
+3. **Pre-defined Inputs**:
+   - `BoolInput` (for checkbox/switch fields, base type `bool`, default value `false`)
+   - `DoubleInput` (for numeric/amount fields, base type `double?`, default value `null`, automatically includes `NumericValidator`)
+   - `DateTimeInput` (for single date/time fields, base type `DateTime?`, default value `null`)
+   - `DateTimeRangeInput` (for date range fields, base type `DateTimeRange?`, default value `null`)
+   - `Uint8ListInput` (for file bytes, base type `Uint8List?`, default value `null`)
+   - **Generic fields**: Use `InputEntity<T>` directly.
+
+---
+
+## 1. Defining a Form Class
+
+Your form class must extend `FormEntity`. 
+- Define fields as instances of `InputEntity` or its subclasses.
+- Provide a constructor that initializes fields with `const InputEntity.pure(field: 'fieldName')` or subclass equivalents.
+- Pass `super.formKey` to the parent constructor.
+- Override `List<InputEntity> get inputs` to return all form fields.
+- Override `void save(Map<String, dynamic> fields)` to update inputs using `input = input.dirty(value: ..., validators: [...])`.
+
+### Example Form Definition
+```dart
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:form_builder_z/models/form_entity.dart';
+import 'package:form_builder_z/models/input_entity.dart';
+import 'package:form_builder_z/inputs/bool_input.dart';
+import 'package:form_builder_z/inputs/double_input.dart';
+
+class CustomUserForm extends FormEntity {
+  CustomUserForm({
+    this.nameInput = const InputEntity.pure(field: 'name'),
+    this.emailInput = const InputEntity.pure(field: 'email'),
+    this.ageInput = const DoubleInput.pure(field: 'age'),
+    this.agreeToTerms = const BoolInput.pure(field: 'agreeToTerms'),
+    super.formKey,
+  });
+
+  InputEntity<String> nameInput;
+  InputEntity<String> emailInput;
+  DoubleInput ageInput;
+  BoolInput agreeToTerms;
+
+  @override
+  List<InputEntity> get inputs => [
+        nameInput,
+        emailInput,
+        ageInput,
+        agreeToTerms,
+      ];
+
+  @override
+  void save(Map<String, dynamic> fields) {
+    nameInput = nameInput.dirty(
+      value: fields[nameInput.field] as String?,
+      validators: const [
+        RequiredValidator(errorText: 'Name is required'),
+        MinLengthValidator(3, errorText: 'Name must be at least 3 characters'),
+      ],
+    );
+
+    emailInput = emailInput.dirty(
+      value: fields[emailInput.field] as String?,
+      validators: const [
+        RequiredValidator(errorText: 'Email is required'),
+        EmailValidator(errorText: 'Please enter a valid email'),
+      ],
+    );
+
+    ageInput = ageInput.dirty(
+      value: fields[ageInput.field] != null
+          ? double.tryParse(fields[ageInput.field].toString())
+          : null,
+      validators: const [
+        RequiredValidator(errorText: 'Age is required'),
+      ],
+    );
+
+    agreeToTerms = agreeToTerms.dirty(
+      value: fields[agreeToTerms.field] as bool? ?? false,
+      validators: const [
+        RequiredValidator(errorText: 'You must agree to terms'),
+      ],
+    );
+  }
+}
+```
+
+---
+
+## 2. Using the Form in Widgets
+
+### UI Layout
+- Wrap your fields in a `FormBuilder` widget.
+- Pass the form's `GlobalKey<FormBuilderState>` to `FormBuilder`'s `key`.
+- Use the input's `field` name for the form field's `name` parameter (e.g. `name: _form.nameInput.field`).
+- Do not pass validators to the FormBuilder field, instead pass them to the input entity.
+
+```dart
+final _formKey = GlobalKey<FormBuilderState>();
+late CustomUserForm _form;
+
+@override
+void initState() {
+  super.initState();
+  _form = CustomUserForm(formKey: _formKey);
+}
+
+@override
+Widget build(BuildContext context) {
+  return FormBuilder(
+    key: _formKey,
+    child: Column(
+      children: [
+        FormBuilderTextField(
+          name: _form.nameInput.field,
+          decoration: const InputDecoration(labelText: 'Name'),
+        ),
+        FormBuilderCheckbox(
+          name: _form.agreeToTerms.field,
+          title: const Text('Agree to terms'),
+        ),
+        ElevatedButton(
+          onPressed: _submit,
+          child: const Text('Submit'),
+        ),
+      ],
+    ),
+  );
+}
+```
+
+### Form Submission & Validation Flow
+1. Call `_form.saveAndValidate()`:
+   - This automatically saves the `FormBuilder`'s current values into the `FormEntity`.
+   - Runs validation for all inputs based on their `validators`.
+2. Check result:
+   - If true, access values using `_form.values` or `_form.nameInput.value`.
+   - If false, field-specific validation errors are automatically populated into the `FormBuilder`'s fields, displaying them on the UI.
+   - Alternatively, fetch error details via `_form.errors` or `_form.errorList`.
+
+```dart
+void _submit() {
+  if (_form.saveAndValidate()) {
+    // Process form data
+    final name = _form.nameInput.value;
+    final age = _form.ageInput.value;
+    // ...
+  } else {
+    // Errors are automatically displayed on the fields
+    print('Form contains validation errors: ${_form.errors}');
+  }
+}
+```
+
+---
+
+## 3. Advanced Usage & File Size Validation
+
+For file uploads using `Uint8ListInput`, use the custom `FileSizeValidator`:
+
+```dart
+import 'dart:typed_data';
+import 'package:form_builder_z/inputs/uint8_list_input.dart';
+import 'package:form_builder_z/validators/file_length_validator.dart';
+
+// In FormEntity:
+Uint8ListInput fileInput = const Uint8ListInput.pure(field: 'file');
+
+// In save method:
+fileInput = fileInput.dirty(
+  value: fields[fileInput.field] as Uint8List?,
+  validators: [
+    FileSizeValidator(5 * 1024 * 1024), // Max 5MB
+  ],
+);
+```
+
+---
+
+## 4. Key Rules for Coding Agents
+
+- **Field Naming**: Always use `_form.inputField.field` instead of hardcoding strings in `FormBuilder` fields to avoid mismatch errors.
+- **Form Validations**: The validators must be configured in the `FormEntity.save` method to maintain simplicity. DO NOT add validators in the UI code, the app will handle it automatically.
+- **Formz States**: Always instantiate fields as `.pure` in the constructor, and update them using `.dirty()` in the `save` method. Do not mutate fields directly.

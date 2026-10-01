@@ -6,12 +6,13 @@ import "../models/input_entity.dart";
 class DoubleInput extends InputEntity<double?> {
   const DoubleInput.pure({
     required super.field,
+    super.validators = const [NumericValidator()],
   }) : super.pure(value: null);
 
   const DoubleInput.dirty({
     required super.field,
     required super.value,
-    super.validators = const [],
+    super.validators = const [NumericValidator()],
   }) : super.dirty();
 
   @override
@@ -22,9 +23,6 @@ class DoubleInput extends InputEntity<double?> {
       DoubleInput.dirty(
         field: field,
         value: value,
-        validators: validators ??
-            const [
-              NumericValidator(),
-            ],
+        validators: validators ?? this.validators,
       );
 }

@@ -7,6 +7,7 @@ import "../models/input_entity.dart";
 class DateTimeRangeInput extends InputEntity<DateTimeRange?> {
   const DateTimeRangeInput.pure({
     required super.field,
+    super.validators = const [],
   }) : super.pure(value: null);
 
   const DateTimeRangeInput.dirty({
@@ -23,9 +24,6 @@ class DateTimeRangeInput extends InputEntity<DateTimeRange?> {
       DateTimeRangeInput.dirty(
         field: field,
         value: value,
-        validators: validators ??
-            [
-             
-            ],
+        validators: validators ?? this.validators,
       );
 }

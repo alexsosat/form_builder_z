@@ -9,6 +9,7 @@ class Uint8ListInput extends InputEntity<Uint8List?> {
   /// Call super.pure to represent an unmodified form input.
   const Uint8ListInput.pure({
     required super.field,
+    super.validators = const [],
   }) : super.pure(value: null);
 
   /// Call super.dirty to represent a modified form input.
@@ -26,6 +27,6 @@ class Uint8ListInput extends InputEntity<Uint8List?> {
       Uint8ListInput.dirty(
         field: field,
         value: value,
-        validators: validators ?? const [],
+        validators: validators ?? this.validators,
       );
 }

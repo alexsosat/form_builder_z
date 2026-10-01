@@ -4,25 +4,27 @@ import 'package:form_builder_z/models/input_entity.dart';
 
 class ExampleForm extends FormEntity {
   ExampleForm({
-    this.stringInput = const InputEntity.pure(
-      field: "text",
-    ),
-  });
+    InputEntity<String>? stringInput,
+    int maxLength = 8,
+    super.formKey,
+  }) : stringInput = stringInput ??
+            InputEntity<String>.pure(
+              field: 'text',
+              validators: [
+                const RequiredValidator(),
+                MaxLengthValidator(maxLength),
+              ],
+            );
 
   InputEntity<String> stringInput;
 
   @override
-  // TODO: implement inputs
-  List<InputEntity> get inputs => throw UnimplementedError();
+  List<InputEntity> get inputs => [stringInput];
 
   @override
   void save(Map<String, dynamic> fields) {
     stringInput = stringInput.dirty(
-      value: fields[stringInput.field],
-      validators: const [
-        RequiredValidator(),
-        MaxLengthValidator(8),
-      ],
+      value: fields[stringInput.field] as String?,
     );
   }
 }

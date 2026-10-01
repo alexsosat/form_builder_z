@@ -49,12 +49,31 @@ import 'package:form_builder_z/inputs/double_input.dart';
 // 1. Define your form class extending FormEntity
 class UserForm extends FormEntity {
   UserForm({
-    this.nameInput = const InputEntity.pure(field: 'name'),
-    this.emailInput = const InputEntity.pure(field: 'email'),
-    this.ageInput = const DoubleInput.pure(field: 'age'),
-    this.agreeToTerms = const BoolInput.pure(field: 'agreeToTerms'),
+    InputEntity<String>? nameInput,
+    InputEntity<String>? emailInput,
+    DoubleInput? ageInput,
+    BoolInput? agreeToTerms,
+    int minNameLength = 3,
     super.formKey,
-  });
+  })  : nameInput = nameInput ?? InputEntity<String>.pure(
+          field: 'name',
+          validators: [
+            const RequiredValidator(errorText: 'Name is required'),
+            MinLengthValidator(minNameLength),
+          ],
+        ),
+        emailInput = emailInput ?? const InputEntity<String>.pure(
+          field: 'email',
+          validators: [RequiredValidator(), EmailValidator()],
+        ),
+        ageInput = ageInput ?? const DoubleInput.pure(
+          field: 'age',
+          validators: [RequiredValidator(), NumericValidator()],
+        ),
+        agreeToTerms = agreeToTerms ?? const BoolInput.pure(
+          field: 'agreeToTerms',
+          validators: [RequiredValidator()],
+        );
 
   InputEntity<String> nameInput;
   InputEntity<String> emailInput;
@@ -71,37 +90,15 @@ class UserForm extends FormEntity {
 
   @override
   void save(Map<String, dynamic> fields) {
-    nameInput = nameInput.dirty(
-      value: fields[nameInput.field] as String?,
-      validators: const [
-        RequiredValidator(errorText: 'Name is required'),
-        MinLengthValidator(3, errorText: 'Name must be at least 3 characters'),
-      ],
-    );
-
-    emailInput = emailInput.dirty(
-      value: fields[emailInput.field] as String?,
-      validators: const [
-        RequiredValidator(errorText: 'Email is required'),
-        EmailValidator(errorText: 'Please enter a valid email'),
-      ],
-    );
-
+    nameInput = nameInput.dirty(value: fields[nameInput.field] as String?);
+    emailInput = emailInput.dirty(value: fields[emailInput.field] as String?);
     ageInput = ageInput.dirty(
       value: fields[ageInput.field] != null
           ? double.tryParse(fields[ageInput.field].toString())
           : null,
-      validators: const [
-        RequiredValidator(errorText: 'Age is required'),
-        NumericValidator(errorText: 'Please enter a valid number'),
-      ],
     );
-
     agreeToTerms = agreeToTerms.dirty(
       value: fields[agreeToTerms.field] as bool? ?? false,
-      validators: const [
-        RequiredValidator(errorText: 'You must agree to the terms'),
-      ],
     );
   }
 }
@@ -191,6 +188,15 @@ class _UserFormWidgetState extends State<UserFormWidget> {
 }
 ```
 
+Constructor default parameter values must be constant in Dart. Use a nullable input
+parameter and initialize its default in the constructor initializer to use runtime
+validator settings, such as `minNameLength` above. A `const` input constructor can
+also be called without `const` to accept runtime validators.
+
+Validators run on pure inputs too: `UserForm().validate()` returns `false` before
+saving because required values are missing. Calling `dirty(value: ...)` preserves
+configured validators; passing `validators: []` explicitly clears them.
+
 ### Available Input Types
 
 The package provides several input types for different data formats:
@@ -249,15 +255,14 @@ import 'dart:typed_data';
 import 'package:form_builder_z/inputs/uint8_list_input.dart';
 import 'package:form_builder_z/validators/file_length_validator.dart';
 
-Uint8ListInput image = const Uint8ListInput.pure(field: 'image');
-
-// In your save method:
-image = image.dirty(
-  value: fields[image.field] as Uint8List?,
-  validators: [
-    FileSizeValidator(5 * 1024 * 1024), // 5MB max
-  ],
+final maxBytes = 5 * 1024 * 1024;
+Uint8ListInput image = Uint8ListInput.pure(
+  field: 'image',
+  validators: [FileSizeValidator(maxBytes)],
 );
+
+// In your save method, the validators are retained:
+image = image.dirty(value: fields[image.field] as Uint8List?);
 ```
 
 ### Form Validation
