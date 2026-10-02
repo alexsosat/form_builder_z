@@ -1,6 +1,6 @@
 name: form_builder_z
-description: "A new Flutter package project."
-version: 0.0.12
+description: "Typed form models and declarative FormBuilder widget generation."
+version: 1.0.0
 homepage: null
 
 environment:
@@ -12,11 +12,15 @@ dependencies:
     sdk: flutter
   flutter_form_builder: ^10.2.0
   form_builder_validators: ^11.2.0
+  flutter_multi_formatter: ^2.13.11
+  flutter_simple_calculator: ^2.7.1
+  mask_text_input_formatter: ^2.9.0
   formz: ^0.8.0
   intl: any
 
 dev_dependencies:
   flutter_lints: ^4.0.0
+  intl_utils: ^2.8.14
   flutter_test:
     sdk: flutter
 
@@ -53,3 +57,12 @@ flutter: null
 #
 # For details regarding fonts in packages, see
 # https://flutter.dev/to/font-from-package
+
+
+flutter_intl:
+  enabled: true # Required. Must be set to true to activate the plugin. Default: false
+  class_name: FormBuilderZLocalizations # Optional. Sets the name for the generated localization class. Default: S
+  main_locale: es # Optional. Sets the main locale used for generating localization files. Provided value should consist of language code and optional script and country codes separated with underscore (e.g. 'en', 'en_GB', 'zh_Hans', 'zh_Hans_CN'). Default: en
+  arb_dir: lib/validators/l10n # Optional. Sets the directory of your ARB resource files. Provided value should be a valid path on your system. Default: lib/l10n
+  output_dir: lib/validators/localization # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
+  use_deferred_loading: false # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false
