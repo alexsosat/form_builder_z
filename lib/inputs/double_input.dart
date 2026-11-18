@@ -4,10 +4,12 @@ import "../models/input_entity.dart";
 
 /// Input field for providing an amount
 class DoubleInput extends InputEntity<double?> {
+  /// Creates an unmodified input with an optional initial value.
   const DoubleInput.pure({
     required super.field,
+    super.value,
     super.validators = const [NumericValidator()],
-  }) : super.pure(value: null);
+  }) : super.pure();
 
   const DoubleInput.dirty({
     required super.field,
@@ -19,10 +21,9 @@ class DoubleInput extends InputEntity<double?> {
   DoubleInput dirty({
     double? value,
     List<BaseValidator<double?>>? validators,
-  }) =>
-      DoubleInput.dirty(
-        field: field,
-        value: value,
-        validators: validators ?? this.validators,
-      );
+  }) => DoubleInput.dirty(
+    field: field,
+    value: value,
+    validators: validators ?? this.validators,
+  );
 }

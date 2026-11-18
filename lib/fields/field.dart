@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_simple_calculator/flutter_simple_calculator.dart';
@@ -38,20 +38,20 @@ sealed class Field<T> {
     TextInputAction? textInputAction,
     List<TextInputFormatter> inputFormatters = const [],
     TextCapitalization textCapitalization = TextCapitalization.none,
-  }) =>
-      _TextField(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          maxLines: maxLines,
-          keyboardType: keyboardType,
-          inputFormatters: List.unmodifiable(inputFormatters),
-          textCapitalization: textCapitalization,
-          textInputAction: textInputAction);
+  }) => _TextField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    maxLines: maxLines,
+    keyboardType: keyboardType,
+    inputFormatters: List.unmodifiable(inputFormatters),
+    textCapitalization: textCapitalization,
+    textInputAction: textInputAction,
+  );
 
   static Field<String> email(
     String name, {
@@ -63,18 +63,18 @@ sealed class Field<T> {
     String? dummyValue,
     TextInputAction? textInputAction,
     List<TextInputFormatter> inputFormatters = const [],
-  }) =>
-      _TextField(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          keyboardType: TextInputType.emailAddress,
-          inputFormatters: List.unmodifiable(inputFormatters),
-          textInputAction: textInputAction);
+  }) => _TextField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    keyboardType: TextInputType.emailAddress,
+    inputFormatters: List.unmodifiable(inputFormatters),
+    textInputAction: textInputAction,
+  );
 
   /// Set viewable to add a show/hide button that replaces decoration.suffixIcon.
   static Field<String> password(
@@ -88,19 +88,19 @@ sealed class Field<T> {
     String? dummyValue,
     TextInputAction? textInputAction,
     List<TextInputFormatter> inputFormatters = const [],
-  }) =>
-      _TextField(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          obscureText: true,
-          viewable: viewable,
-          inputFormatters: List.unmodifiable(inputFormatters),
-          textInputAction: textInputAction);
+  }) => _TextField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    obscureText: true,
+    viewable: viewable,
+    inputFormatters: List.unmodifiable(inputFormatters),
+    textInputAction: textInputAction,
+  );
 
   static Field<String> textArea(
     String name, {
@@ -113,19 +113,19 @@ sealed class Field<T> {
     int? maxLines = 4,
     List<TextInputFormatter> inputFormatters = const [],
     TextCapitalization textCapitalization = TextCapitalization.none,
-  }) =>
-      _TextField(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          maxLines: maxLines,
-          inputFormatters: List.unmodifiable(inputFormatters),
-          textCapitalization: textCapitalization,
-          keyboardType: TextInputType.multiline);
+  }) => _TextField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    maxLines: maxLines,
+    inputFormatters: List.unmodifiable(inputFormatters),
+    textCapitalization: textCapitalization,
+    keyboardType: TextInputType.multiline,
+  );
 
   static Field<double> number(
     String name, {
@@ -141,18 +141,18 @@ sealed class Field<T> {
       decimal: true,
       signed: true,
     ),
-  }) =>
-      _NumberField(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          parseErrorText: parseErrorText,
-          inputFormatters: List.unmodifiable(inputFormatters),
-          keyboardType: keyboardType);
+  }) => _NumberField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    parseErrorText: parseErrorText,
+    inputFormatters: List.unmodifiable(inputFormatters),
+    keyboardType: keyboardType,
+  );
 
   static Field<bool> checkbox(
     String name, {
@@ -163,16 +163,16 @@ sealed class Field<T> {
     bool hidden = false,
     bool readOnly = false,
     bool? dummyValue,
-  }) =>
-      _CheckboxField(
-          name: name,
-          label: label,
-          title: title ?? Text(label ?? name),
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue);
+  }) => _CheckboxField(
+    name: name,
+    label: label,
+    title: title ?? Text(label ?? name),
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+  );
 
   static Field<DateTime> date(
     String name, {
@@ -184,18 +184,18 @@ sealed class Field<T> {
     DateTime? dummyValue,
     DateTime? firstDate,
     DateTime? lastDate,
-  }) =>
-      _DateTimeField(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          inputType: InputType.date,
-          firstDate: firstDate,
-          lastDate: lastDate);
+  }) => _DateTimeField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    inputType: InputType.date,
+    firstDate: firstDate,
+    lastDate: lastDate,
+  );
 
   static Field<DateTime> datetime(
     String name, {
@@ -207,17 +207,17 @@ sealed class Field<T> {
     DateTime? dummyValue,
     DateTime? firstDate,
     DateTime? lastDate,
-  }) =>
-      _DateTimeField(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          firstDate: firstDate,
-          lastDate: lastDate);
+  }) => _DateTimeField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    firstDate: firstDate,
+    lastDate: lastDate,
+  );
 
   static Field<DateTimeRange> dateRange(
     String name, {
@@ -229,17 +229,17 @@ sealed class Field<T> {
     bool hidden = false,
     bool readOnly = false,
     DateTimeRange? dummyValue,
-  }) =>
-      _DateRangeField(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          firstDate: firstDate,
-          lastDate: lastDate);
+  }) => _DateRangeField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    firstDate: firstDate,
+    lastDate: lastDate,
+  );
 
   static Field<V> dropdown<V>(
     String name, {
@@ -250,39 +250,41 @@ sealed class Field<T> {
     bool hidden = false,
     bool readOnly = false,
     V? dummyValue,
-  }) =>
-      _DropdownField<V>(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          items: List.unmodifiable(items));
+  }) => _DropdownField<V>(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    items: List.unmodifiable(items),
+  );
 
   /// The control must call state.didChange(value) and respect state.enabled.
   static Field<V> builder<V>(
     String name, {
-    required Widget Function(BuildContext context,
-            FormBuilderFieldState<FormBuilderField<V>, V> state)
-        builder,
+    required Widget Function(
+      BuildContext context,
+      FormBuilderFieldState<FormBuilderField<V>, V> state,
+    )
+    builder,
     String? label,
     InputDecoration decoration = const InputDecoration(),
     bool enabled = true,
     bool hidden = false,
     bool readOnly = false,
     V? dummyValue,
-  }) =>
-      _CustomField<V>(
-          name: name,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue,
-          builder: builder);
+  }) => _CustomField<V>(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    builder: builder,
+  );
 
   static Field<String> capitalizeWords(
     String name, {
@@ -294,21 +296,21 @@ sealed class Field<T> {
     String? dummyValue,
     TextInputAction? textInputAction,
     List<TextInputFormatter>? inputFormatters,
-  }) =>
-      _TextField(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        keyboardType: TextInputType.text,
-        textCapitalization: TextCapitalization.words,
-        textInputAction: textInputAction,
-        inputFormatters:
-            List.unmodifiable(inputFormatters ?? const <TextInputFormatter>[]),
-      );
+  }) => _TextField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    keyboardType: TextInputType.text,
+    textCapitalization: TextCapitalization.words,
+    textInputAction: textInputAction,
+    inputFormatters: List.unmodifiable(
+      inputFormatters ?? const <TextInputFormatter>[],
+    ),
+  );
 
   static Field<String> capitalizeSentences(
     String name, {
@@ -320,21 +322,21 @@ sealed class Field<T> {
     String? dummyValue,
     TextInputAction? textInputAction,
     List<TextInputFormatter>? inputFormatters,
-  }) =>
-      _TextField(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        keyboardType: TextInputType.text,
-        textCapitalization: TextCapitalization.sentences,
-        textInputAction: textInputAction,
-        inputFormatters:
-            List.unmodifiable(inputFormatters ?? const <TextInputFormatter>[]),
-      );
+  }) => _TextField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    keyboardType: TextInputType.text,
+    textCapitalization: TextCapitalization.sentences,
+    textInputAction: textInputAction,
+    inputFormatters: List.unmodifiable(
+      inputFormatters ?? const <TextInputFormatter>[],
+    ),
+  );
 
   static Field<String> url(
     String name, {
@@ -346,21 +348,21 @@ sealed class Field<T> {
     String? dummyValue,
     TextInputAction? textInputAction,
     List<TextInputFormatter>? inputFormatters,
-  }) =>
-      _TextField(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        keyboardType: TextInputType.url,
-        textCapitalization: TextCapitalization.none,
-        textInputAction: textInputAction,
-        inputFormatters:
-            List.unmodifiable(inputFormatters ?? [FormInputFormatters.url()]),
-      );
+  }) => _TextField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    keyboardType: TextInputType.url,
+    textCapitalization: TextCapitalization.none,
+    textInputAction: textInputAction,
+    inputFormatters: List.unmodifiable(
+      inputFormatters ?? [FormInputFormatters.url()],
+    ),
+  );
 
   static Field<String> phoneNumber(
     String name, {
@@ -373,24 +375,26 @@ sealed class Field<T> {
     String? defaultCountryCode,
     TextInputAction? textInputAction,
     List<TextInputFormatter>? inputFormatters,
-  }) =>
-      _TextField(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        keyboardType: TextInputType.phone,
-        textCapitalization: TextCapitalization.none,
-        textInputAction: textInputAction,
-        inputFormatters: List.unmodifiable(inputFormatters ??
-            [
-              FormInputFormatters.phoneNumber(
-                  defaultCountryCode: defaultCountryCode)
-            ]),
-      );
+  }) => _TextField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    keyboardType: TextInputType.phone,
+    textCapitalization: TextCapitalization.none,
+    textInputAction: textInputAction,
+    inputFormatters: List.unmodifiable(
+      inputFormatters ??
+          [
+            FormInputFormatters.phoneNumber(
+              defaultCountryCode: defaultCountryCode,
+            ),
+          ],
+    ),
+  );
 
   /// A formatted currency control backed by a double amount.
   /// With showCalculator, edits stay in a calculator sheet until Done is pressed.
@@ -409,7 +413,10 @@ sealed class Field<T> {
     List<TextInputFormatter>? inputFormatters,
   }) {
     final formatter = FormInputFormatters.currency(
-        currency: currency, locale: locale, decimalDigits: decimalDigits);
+      currency: currency,
+      locale: locale,
+      decimalDigits: decimalDigits,
+    );
     return _CurrencyField(
       name: name,
       label: label,
@@ -440,22 +447,21 @@ sealed class Field<T> {
     TextInputType? keyboardType,
     TextInputAction? textInputAction,
     List<TextInputFormatter>? inputFormatters,
-  }) =>
-      _MaskField(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        mask: mask,
-        match: match,
-        maskReturnValue: maskReturnValue,
-        keyboardType: keyboardType,
-        textInputAction: textInputAction,
-        inputFormatters: inputFormatters,
-      );
+  }) => _MaskField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    mask: mask,
+    match: match,
+    maskReturnValue: maskReturnValue,
+    keyboardType: keyboardType,
+    textInputAction: textInputAction,
+    inputFormatters: inputFormatters,
+  );
 
   static Field<V> picker<V>(
     String name, {
@@ -467,18 +473,69 @@ sealed class Field<T> {
     bool readOnly = false,
     V? dummyValue,
     bool clearable = true,
-  }) =>
-      _PickerField<V>(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        options: List.unmodifiable(options),
-        clearable: clearable,
-      );
+  }) => _PickerField<V>(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    options: List.unmodifiable(options),
+    clearable: clearable,
+  );
+
+  /// Multiple selection using a native checkbox group.
+  static Field<List<V>> checkboxGroup<V>(
+    String name, {
+    required List<FormBuilderFieldOption<V>> options,
+    String? label,
+    InputDecoration decoration = const InputDecoration(),
+    bool enabled = true,
+    bool hidden = false,
+    bool readOnly = false,
+    List<V>? dummyValue,
+    OptionsOrientation orientation = OptionsOrientation.wrap,
+    double spacing = 8,
+    double runSpacing = 8,
+  }) => _CheckboxGroupField<V>(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    options: List.unmodifiable(options),
+    orientation: orientation,
+    spacing: spacing,
+    runSpacing: runSpacing,
+  );
+
+  /// Single selection using choice chips; deselecting saves null.
+  static Field<V> choiceChips<V>(
+    String name, {
+    required List<FormBuilderFieldOption<V>> options,
+    String? label,
+    InputDecoration decoration = const InputDecoration(),
+    bool enabled = true,
+    bool hidden = false,
+    bool readOnly = false,
+    V? dummyValue,
+    double spacing = 8,
+    double runSpacing = 8,
+  }) => _ChoiceChipsField<V>(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    options: List.unmodifiable(options),
+    spacing: spacing,
+    runSpacing: runSpacing,
+  );
 
   static Field<V> radio<V>(
     String name, {
@@ -490,18 +547,17 @@ sealed class Field<T> {
     bool readOnly = false,
     V? dummyValue,
     OptionsOrientation orientation = OptionsOrientation.wrap,
-  }) =>
-      _RadioField<V>(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        options: List.unmodifiable(options),
-        orientation: orientation,
-      );
+  }) => _RadioField<V>(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    options: List.unmodifiable(options),
+    orientation: orientation,
+  );
 
   /// Multiple selection, matching Nylo's chips field.
   static Field<List<V>> chips<V>(
@@ -515,19 +571,18 @@ sealed class Field<T> {
     List<V>? dummyValue,
     double spacing = 8,
     double runSpacing = 8,
-  }) =>
-      _ChipsField<V>(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        options: List.unmodifiable(options),
-        spacing: spacing,
-        runSpacing: runSpacing,
-      );
+  }) => _ChipsField<V>(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    options: List.unmodifiable(options),
+    spacing: spacing,
+    runSpacing: runSpacing,
+  );
 
   static Field<bool> switchBox(
     String name, {
@@ -538,17 +593,16 @@ sealed class Field<T> {
     bool readOnly = false,
     bool? dummyValue,
     Widget? title,
-  }) =>
-      _SwitchField(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        title: title ?? Text(label ?? name),
-      );
+  }) => _SwitchField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    title: title ?? Text(label ?? name),
+  );
 
   static Field<double> slider(
     String name, {
@@ -561,19 +615,18 @@ sealed class Field<T> {
     double min = 0,
     double max = 1,
     int? divisions,
-  }) =>
-      _SliderField(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        min: min,
-        max: max,
-        divisions: divisions,
-      );
+  }) => _SliderField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    min: min,
+    max: max,
+    divisions: divisions,
+  );
 
   static Field<RangeValues> rangeSlider(
     String name, {
@@ -586,49 +639,50 @@ sealed class Field<T> {
     double min = 0,
     double max = 1,
     int? divisions,
-  }) =>
-      _RangeSliderField(
-        name: name,
-        label: label,
-        decoration: decoration,
-        enabled: enabled,
-        hidden: hidden,
-        readOnly: readOnly,
-        dummyValue: dummyValue,
-        min: min,
-        max: max,
-        divisions: divisions,
-      );
+  }) => _RangeSliderField(
+    name: name,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+    min: min,
+    max: max,
+    divisions: divisions,
+  );
 
   /// Alias for builder: a custom control receives its registered field state.
   static Field<V> custom<V>(
     String name, {
-    required Widget Function(BuildContext context,
-            FormBuilderFieldState<FormBuilderField<V>, V> state)
-        builder,
+    required Widget Function(
+      BuildContext context,
+      FormBuilderFieldState<FormBuilderField<V>, V> state,
+    )
+    builder,
     String? label,
     InputDecoration decoration = const InputDecoration(),
     bool enabled = true,
     bool hidden = false,
     bool readOnly = false,
     V? dummyValue,
-  }) =>
-      Field.builder<V>(name,
-          builder: builder,
-          label: label,
-          decoration: decoration,
-          enabled: enabled,
-          hidden: hidden,
-          readOnly: readOnly,
-          dummyValue: dummyValue);
+  }) => Field.builder<V>(
+    name,
+    builder: builder,
+    label: label,
+    decoration: decoration,
+    enabled: enabled,
+    hidden: hidden,
+    readOnly: readOnly,
+    dummyValue: dummyValue,
+  );
 
   /// Embed content without adding a model input or a submitted value.
   static Field<Never> widget({
     required Widget child,
     bool hidden = false,
     bool readOnly = false,
-  }) =>
-      _WidgetField(child, hidden: hidden, readOnly: readOnly);
+  }) => _WidgetField(child, hidden: hidden, readOnly: readOnly);
 
   final String name;
   final String? label;
@@ -636,9 +690,8 @@ sealed class Field<T> {
   /// Ordinary content has no input, saved value, or validator.
   bool get isInput => true;
 
-  InputDecoration get effectiveDecoration => decoration.copyWith(
-        labelText: label ?? decoration.labelText ?? name,
-      );
+  InputDecoration get effectiveDecoration =>
+      decoration.copyWith(labelText: label ?? decoration.labelText ?? name);
   final InputDecoration decoration;
   final bool enabled;
 
@@ -663,8 +716,10 @@ sealed class Field<T> {
     }
     final input = matches.single;
     if (input is! InputEntity<T?>) {
-      throw ArgumentError('Field "$name" requires an InputEntity<$T?>, '
-          'but received ${input.runtimeType}.');
+      throw ArgumentError(
+        'Field "$name" requires an InputEntity<$T?>, '
+        'but received ${input.runtimeType}.',
+      );
     }
     return input;
   }
@@ -712,8 +767,8 @@ class _TextField extends Field<String> {
     this.maxLines = 1,
     this.keyboardType,
     this.textInputAction,
-  })  : assert(!obscureText || maxLines == 1),
-        super._();
+  }) : assert(!obscureText || maxLines == 1),
+       super._();
 
   final bool obscureText;
   final bool viewable;
@@ -734,15 +789,14 @@ class _TextField extends Field<String> {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      _TextFieldControl(
-        field: this,
-        form: form,
-        onChanged: onChanged,
-        enabled: formEnabled && enabled,
-        autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
-        validator: validator,
-      );
+  }) => _TextFieldControl(
+    field: this,
+    form: form,
+    onChanged: onChanged,
+    enabled: formEnabled && enabled,
+    autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
+    validator: validator,
+  );
 }
 
 /// Keeps the registered text control stable as password visibility changes.
@@ -795,7 +849,8 @@ class _TextFieldControlState extends State<_TextFieldControl> {
       key: ValueKey(field.name),
       name: field.name,
       initialValue: field.encode(field.inputFor(widget.form).value) as String?,
-      validator: widget.validator ??
+      validator:
+          widget.validator ??
           (value) => field.validateValue(widget.form, value),
       onChanged: widget.onChanged,
       valueTransformer: field.decode,
@@ -858,27 +913,26 @@ class _NumberField extends Field<double> {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      FormBuilderTextField(
-        key: ValueKey(name),
-        name: name,
-        initialValue: encode(inputFor(form).value),
-        validator: validator ?? (value) => validateValue(form, value),
-        valueTransformer: (value) {
-          try {
-            return decode(value);
-          } on FormatException {
-            return inputFor(form).value;
-          }
-        },
-        onChanged: onChanged,
-        decoration: effectiveDecoration,
-        enabled: formEnabled && enabled,
-        readOnly: readOnly,
-        autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
-        keyboardType: keyboardType,
-        inputFormatters: inputFormatters,
-      );
+  }) => FormBuilderTextField(
+    key: ValueKey(name),
+    name: name,
+    initialValue: encode(inputFor(form).value),
+    validator: validator ?? (value) => validateValue(form, value),
+    valueTransformer: (value) {
+      try {
+        return decode(value);
+      } on FormatException {
+        return inputFor(form).value;
+      }
+    },
+    onChanged: onChanged,
+    decoration: effectiveDecoration,
+    enabled: formEnabled && enabled,
+    readOnly: readOnly,
+    autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
+    keyboardType: keyboardType,
+    inputFormatters: inputFormatters,
+  );
 }
 
 class _CheckboxField extends Field<bool> {
@@ -903,18 +957,17 @@ class _CheckboxField extends Field<bool> {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      FormBuilderCheckbox(
-        key: ValueKey(name),
-        name: name,
-        title: title,
-        initialValue: inputFor(form).value ?? false,
-        validator: validator ?? (value) => validateValue(form, value),
-        onChanged: onChanged,
-        decoration: decoration,
-        enabled: formEnabled && enabled,
-        autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
-      );
+  }) => FormBuilderCheckbox(
+    key: ValueKey(name),
+    name: name,
+    title: title,
+    initialValue: inputFor(form).value ?? false,
+    validator: validator ?? (value) => validateValue(form, value),
+    onChanged: onChanged,
+    decoration: decoration,
+    enabled: formEnabled && enabled,
+    autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
+  );
 }
 
 class _DateTimeField extends Field<DateTime> {
@@ -943,20 +996,19 @@ class _DateTimeField extends Field<DateTime> {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      FormBuilderDateTimePicker(
-        key: ValueKey(name),
-        name: name,
-        initialValue: inputFor(form).value,
-        validator: validator ?? (value) => validateValue(form, value),
-        onChanged: onChanged,
-        decoration: effectiveDecoration,
-        enabled: formEnabled && enabled,
-        autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
-        inputType: inputType,
-        firstDate: firstDate,
-        lastDate: lastDate,
-      );
+  }) => FormBuilderDateTimePicker(
+    key: ValueKey(name),
+    name: name,
+    initialValue: inputFor(form).value,
+    validator: validator ?? (value) => validateValue(form, value),
+    onChanged: onChanged,
+    decoration: effectiveDecoration,
+    enabled: formEnabled && enabled,
+    autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
+    inputType: inputType,
+    firstDate: firstDate,
+    lastDate: lastDate,
+  );
 }
 
 class _DateRangeField extends Field<DateTimeRange> {
@@ -983,19 +1035,18 @@ class _DateRangeField extends Field<DateTimeRange> {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      FormBuilderDateRangePicker(
-        key: ValueKey(name),
-        name: name,
-        initialValue: inputFor(form).value,
-        validator: validator ?? (value) => validateValue(form, value),
-        onChanged: onChanged,
-        decoration: effectiveDecoration,
-        enabled: formEnabled && enabled,
-        autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
-        firstDate: firstDate,
-        lastDate: lastDate,
-      );
+  }) => FormBuilderDateRangePicker(
+    key: ValueKey(name),
+    name: name,
+    initialValue: inputFor(form).value,
+    validator: validator ?? (value) => validateValue(form, value),
+    onChanged: onChanged,
+    decoration: effectiveDecoration,
+    enabled: formEnabled && enabled,
+    autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
+    firstDate: firstDate,
+    lastDate: lastDate,
+  );
 }
 
 class _DropdownField<T> extends Field<T> {
@@ -1020,18 +1071,17 @@ class _DropdownField<T> extends Field<T> {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      FormBuilderDropdown<T>(
-        key: ValueKey(name),
-        name: name,
-        items: items,
-        initialValue: inputFor(form).value,
-        validator: validator ?? (value) => validateValue(form, value),
-        onChanged: onChanged,
-        decoration: effectiveDecoration,
-        enabled: formEnabled && enabled,
-        autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
-      );
+  }) => FormBuilderDropdown<T>(
+    key: ValueKey(name),
+    name: name,
+    items: items,
+    initialValue: inputFor(form).value,
+    validator: validator ?? (value) => validateValue(form, value),
+    onChanged: onChanged,
+    decoration: effectiveDecoration,
+    enabled: formEnabled && enabled,
+    autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
+  );
 }
 
 /// Build a control using `state.didChange(value)` and respect `state.enabled`.
@@ -1051,7 +1101,8 @@ class _CustomField<T> extends Field<T> {
   final Widget Function(
     BuildContext context,
     FormBuilderFieldState<FormBuilderField<T>, T> state,
-  ) builder;
+  )
+  builder;
 
   @override
   Widget buildField(
@@ -1061,29 +1112,30 @@ class _CustomField<T> extends Field<T> {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      FormBuilderField<T>(
-        key: ValueKey(name),
-        name: name,
-        initialValue: inputFor(form).value,
-        validator: validator ?? (value) => validateValue(form, value),
-        onChanged: onChanged,
-        enabled: formEnabled && enabled && !readOnly,
-        autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
-        builder: (state) => InputDecorator(
-          decoration: effectiveDecoration.copyWith(
-            enabled: state.widget.enabled,
-            errorText: state.errorText,
-          ),
-          child: builder(
-              context, state as FormBuilderFieldState<FormBuilderField<T>, T>),
-        ),
-      );
+  }) => FormBuilderField<T>(
+    key: ValueKey(name),
+    name: name,
+    initialValue: inputFor(form).value,
+    validator: validator ?? (value) => validateValue(form, value),
+    onChanged: onChanged,
+    enabled: formEnabled && enabled && !readOnly,
+    autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
+    builder: (state) => InputDecorator(
+      decoration: effectiveDecoration.copyWith(
+        enabled: state.widget.enabled,
+        errorText: state.errorText,
+      ),
+      child: builder(
+        context,
+        state as FormBuilderFieldState<FormBuilderField<T>, T>,
+      ),
+    ),
+  );
 }
 
 class _WidgetField extends Field<Never> {
   const _WidgetField(this.child, {super.hidden, super.readOnly})
-      : super._(name: '');
+    : super._(name: '');
 
   final Widget child;
 
@@ -1098,6 +1150,5 @@ class _WidgetField extends Field<Never> {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      child;
+  }) => child;
 }

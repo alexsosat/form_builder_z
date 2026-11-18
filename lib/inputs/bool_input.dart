@@ -4,12 +4,12 @@ import "../models/input_entity.dart";
 
 /// Input that handles a boolean (checkbox) input field
 class BoolInput extends InputEntity<bool> {
+  /// Creates an unmodified input, defaulting to false.
   const BoolInput.pure({
     required super.field,
+    super.value = false,
     super.validators = const [],
-  }) : super.pure(
-          value: false,
-        );
+  }) : super.pure();
 
   /// Constructor for the input
   const BoolInput.dirty({
@@ -19,10 +19,7 @@ class BoolInput extends InputEntity<bool> {
   }) : super.dirty();
 
   @override
-  BoolInput dirty({
-    bool? value,
-    List<BaseValidator<bool?>>? validators,
-  }) =>
+  BoolInput dirty({bool? value, List<BaseValidator<bool?>>? validators}) =>
       BoolInput.dirty(
         value: value ?? false,
         field: field,

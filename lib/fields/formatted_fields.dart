@@ -14,11 +14,11 @@ class _CurrencyField extends _NumberField {
     super.dummyValue,
     List<TextInputFormatter>? inputFormatters,
   }) : super(
-          decoration: decoration.prefixText == null && decoration.prefix == null
-              ? decoration.copyWith(prefixText: '${formatter.currencySymbol} ')
-              : decoration,
-          inputFormatters: List.unmodifiable(inputFormatters ?? [formatter]),
-        );
+         decoration: decoration.prefixText == null && decoration.prefix == null
+             ? decoration.copyWith(prefixText: '${formatter.currencySymbol} ')
+             : decoration,
+         inputFormatters: List.unmodifiable(inputFormatters ?? [formatter]),
+       );
 
   final CurrencyTextInputFormatter formatter;
   final bool showCalculator;
@@ -39,15 +39,14 @@ class _CurrencyField extends _NumberField {
     required bool formEnabled,
     required AutovalidateMode autovalidateMode,
     String? Function(Object?)? validator,
-  }) =>
-      _CurrencyFieldControl(
-        field: this,
-        form: form,
-        onChanged: onChanged,
-        enabled: formEnabled && enabled,
-        autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
-        validator: validator,
-      );
+  }) => _CurrencyFieldControl(
+    field: this,
+    form: form,
+    onChanged: onChanged,
+    enabled: formEnabled && enabled,
+    autovalidateMode: hidden ? AutovalidateMode.disabled : autovalidateMode,
+    validator: validator,
+  );
 }
 
 /// Preserves the registered text field when the input mode changes.
@@ -130,8 +129,10 @@ class _CurrencyFieldControlState extends State<_CurrencyFieldControl> {
     final route = ModalBottomSheetRoute<_CurrencyCalculatorResult>(
       isScrollControlled: true,
       useSafeArea: true,
-      capturedThemes:
-          InheritedTheme.capture(from: context, to: navigator.context),
+      capturedThemes: InheritedTheme.capture(
+        from: context,
+        to: navigator.context,
+      ),
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       builder: (_) => _CurrencyCalculatorSheet(
         label: field.label ?? field.decoration.labelText ?? field.name,
@@ -179,7 +180,8 @@ class _CurrencyFieldControlState extends State<_CurrencyFieldControl> {
       key: ValueKey(field.name),
       name: field.name,
       initialValue: field.encode(field.inputFor(widget.form).value),
-      validator: widget.validator ??
+      validator:
+          widget.validator ??
           (value) => field.validateValue(widget.form, value),
       valueTransformer: (value) {
         try {
@@ -196,8 +198,9 @@ class _CurrencyFieldControlState extends State<_CurrencyFieldControl> {
       enabled: widget.enabled,
       readOnly: field.readOnly || field.showCalculator,
       autovalidateMode: widget.autovalidateMode,
-      keyboardType:
-          field.showCalculator ? TextInputType.none : field.keyboardType,
+      keyboardType: field.showCalculator
+          ? TextInputType.none
+          : field.keyboardType,
       inputFormatters: field.inputFormatters,
       onTap: field.showCalculator ? _openCalculator : null,
       onTapAlwaysCalled: field.showCalculator,
@@ -256,8 +259,9 @@ class _CurrencyCalculatorSheetState extends State<_CurrencyCalculatorSheet> {
   void initState() {
     super.initState();
     final format = NumberFormat.decimalPattern(widget.locale)
-      ..maximumFractionDigits =
-          widget.fractionDigits > 6 ? widget.fractionDigits : 6;
+      ..maximumFractionDigits = widget.fractionDigits > 6
+          ? widget.fractionDigits
+          : 6;
     _controller = CalcController.numberFormat(format, 10);
     _empty = widget.initialValue == null;
   }
@@ -314,32 +318,44 @@ class _CurrencyCalculatorSheetState extends State<_CurrencyCalculatorSheet> {
       top: false,
       child: SizedBox(
         height: height > 500 ? 500 : height,
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(children: [
-              Expanded(
-                child: Text(widget.label,
-                    style: Theme.of(context).textTheme.titleMedium),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.label,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  TextButton(onPressed: _clear, child: const Text('Clear')),
+                  TextButton(onPressed: _done, child: const Text('Done')),
+                ],
               ),
-              TextButton(onPressed: _clear, child: const Text('Clear')),
-              TextButton(onPressed: _done, child: const Text('Done')),
-            ]),
-          ),
-          if (_error != null)
-            Text(_error!,
-                style: TextStyle(color: Theme.of(context).colorScheme.error)),
-          Expanded(
-            child: SimpleCalculator(
-              controller: _controller,
-              focusNode: _focusNode,
-              value: widget.initialValue ?? 0,
-              autofocus: true,
-              hideSurroundingBorder: true,
-              onChanged: _changed,
             ),
-          ),
-        ]),
+            if (_error != null)
+              Text(
+                _error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+            Expanded(
+              // The calculator still uses Flutter's legacy Material library.
+              // ignore: deprecated_member_use
+              child: MaterialUiCompatibilityBridge(
+                child: SimpleCalculator(
+                  controller: _controller,
+                  focusNode: _focusNode,
+                  value: widget.initialValue ?? 0,
+                  autofocus: true,
+                  hideSurroundingBorder: true,
+                  onChanged: _changed,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -360,12 +376,13 @@ class _MaskField extends _TextField {
     super.keyboardType,
     super.textInputAction,
     List<TextInputFormatter>? inputFormatters,
-  })  : _mask =
-            MaskTextInputFormatter(mask: mask, filter: {'#': RegExp(match)}),
-        super(
-          inputFormatters: List.unmodifiable(inputFormatters ??
-              [FormInputFormatters.mask(mask: mask, match: match)]),
-        ) {
+  }) : _mask = MaskTextInputFormatter(mask: mask, filter: {'#': RegExp(match)}),
+       super(
+         inputFormatters: List.unmodifiable(
+           inputFormatters ??
+               [FormInputFormatters.mask(mask: mask, match: match)],
+         ),
+       ) {
     if (mask.isEmpty || !mask.contains('#')) {
       throw ArgumentError.value(mask, 'mask', 'Must contain a # placeholder');
     }

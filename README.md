@@ -20,8 +20,9 @@ Add `form_builder_z` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  form_builder_z: ^1.0.0
-  flutter_form_builder: ^10.2.0
+  form_builder_z: ^0.2.0
+  flutter_form_builder: ^11.0.0
+  material_ui: ^1.5.0
   form_builder_validators: ^11.2.0
 ```
 
@@ -30,6 +31,28 @@ Then run:
 ```bash
 flutter pub get
 ```
+
+### Migrating to 0.2.0
+
+Version 0.2.0 requires Flutter 3.47.0 and Dart 3.13.0 or later, and uses Flutter
+Form Builder 11. Update your SDK before resolving dependencies. This repository
+uses Flutter 3.47.6 through FVM.
+
+Import `package:material_ui/material_ui.dart` for Material widgets and for field
+arguments such as `InputDecoration`, `DropdownMenuItem`, `DateTimeRange`, and
+`RangeValues`. Migrate your app's `MaterialApp`, theme, and Material localization
+delegates to the same library. Core widgets and validators can continue using
+`package:flutter/widgets.dart`. Existing factory names and your form model's
+constructor and `save()` override remain the same.
+
+Errors set through a registered field's `invalidate()` persist when validation
+runs again. Editing or resetting the field clears these errors. Visible
+registered-field errors appear in `FormWidgetState.errors` and `onFailure`.
+Hidden fields retain their errors without blocking widget submission.
+
+The currency calculator bridges its legacy Material widgets internally; the
+app does not need to add a compatibility bridge for this field. Custom controls
+using legacy Material dependencies may need their own bridge.
 
 ## Usage
 
@@ -41,7 +64,7 @@ Bind the widget to your existing `FormEntity`: inputs, values, validators, and
 `save()` remain in the model. Your page instantiates the form widget directly.
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_builder_z/form_builder_z.dart';
 
@@ -123,6 +146,32 @@ Mounting leaves inputs pure unless debug dummy values are applied. Widget
 validation always resolves current model inputs, including their replacements
 after saving.
 
+#### Initial values
+
+Every input's `.pure()` constructor accepts an optional `value`. Set it in the
+model before mounting the form; generated fields display it without marking the
+input dirty or calling `save()`.
+
+```dart
+final name = const InputEntity<String>.pure(field: 'name', value: 'Alex');
+final price = const DoubleInput.pure(field: 'price', value: 150.75);
+final notifications = const BoolInput.pure(field: 'notifications', value: true);
+final date = DateTimeInput.pure(field: 'date', value: DateTime(2026, 10, 5));
+final range = DateTimeRangeInput.pure(
+  field: 'range',
+  value: DateTimeRange(start: DateTime(2026, 10, 5), end: DateTime(2026, 10, 7)),
+);
+final file = Uint8ListInput.pure(field: 'file', value: Uint8List.fromList([1, 2]));
+```
+
+Import `dart:typed_data` for `Uint8List`. Omitted values remain `null`, except
+`BoolInput.pure()`, which defaults to `false`. Initial values use the input's
+validators. Debug dummy values preserve non-empty model values; set
+`useDummyValues: false` to disable autofill for intentionally empty values.
+
+For values loaded after mounting, update the model and rebuild the parent to
+synchronize the fields. Keep the form instance outside `build()` to retain edits.
+
 #### Field factories
 
 | Factory | Model value | Presentation |
@@ -139,6 +188,7 @@ after saving.
 | `Field.currency()` | `double?` | Currency formatting, locale, and fractional precision |
 | `Field.number()` | `double?` | Numeric keyboard and configurable parsing error |
 | `Field.checkbox()` | `bool?` | Label or custom title widget |
+| `Field.checkboxGroup<T>()` | `List<T>?` | Multiple selection using checkboxes |
 | `Field.switchBox()` | `bool?` | Label or custom switch title |
 | `Field.date()` | `DateTime?` | Date picker and optional date bounds |
 | `Field.datetime()` | `DateTime?` | Date/time picker and optional date bounds |
@@ -147,6 +197,7 @@ after saving.
 | `Field.picker<T>()` | `T?` | Bottom-sheet selection with an optional clear button |
 | `Field.radio<T>()` | `T?` | Radio selection with configurable orientation |
 | `Field.chips<T>()` | `List<T>?` | Multiple selection with typed chip options |
+| `Field.choiceChips<T>()` | `T?` | Single selection with choice chips |
 | `Field.slider()` | `double?` | Numeric slider with bounds and optional divisions |
 | `Field.rangeSlider()` | `RangeValues?` | Range slider with bounds and optional divisions |
 | `Field.builder<T>()` | `T?` | Custom registered control |
@@ -255,10 +306,15 @@ controls. Formatters assist entry; validation rules remain in the model.
 
 #### Selection controls and sliders
 
-`picker()`, `radio()`, and `chips()` accept typed `FormBuilderFieldOption<T>`
-lists, exported from the package entrypoint. Pickers open a bottom sheet and
+`picker()`, `radio()`, `chips()`, `checkboxGroup()`, and `choiceChips()` accept
+typed `FormBuilderFieldOption<T>` lists, exported from the package entrypoint.
+Pickers open a bottom sheet and
 support clearing by default; set `clearable: false` to omit the clear button.
-Chips support multiple selection and require an `InputEntity<List<T>>`.
+Filter chips (`chips()`) and checkbox groups support multiple selection and
+require an `InputEntity<List<T>>`. Choice chips select one value and require an
+`InputEntity<T>`. Deselecting all checkboxes saves an empty list; deselecting a
+choice chip saves null. Both new factories accept `spacing` and `runSpacing`
+(default 8); checkbox groups also support `orientation` (default wrap).
 
 ```dart
 Field.picker<String>('country', options: const [
@@ -268,6 +324,14 @@ Field.picker<String>('country', options: const [
 Field.chips<String>('interests', options: const [
   FormBuilderFieldOption(value: 'dart', child: Text('Dart')),
   FormBuilderFieldOption(value: 'flutter', child: Text('Flutter')),
+]);
+Field.checkboxGroup<String>('contactMethods', options: const [
+  FormBuilderFieldOption(value: 'email', child: Text('Email')),
+  FormBuilderFieldOption(value: 'sms', child: Text('SMS')),
+]);
+Field.choiceChips<String>('priority', options: const [
+  FormBuilderFieldOption(value: 'normal', child: Text('Normal')),
+  FormBuilderFieldOption(value: 'urgent', child: Text('Urgent')),
 ]);
 Field.slider('rating', min: 1, max: 5, divisions: 4);
 Field.rangeSlider('budget', min: 0, max: 100);
@@ -478,7 +542,7 @@ existing example model.
 Here's a simple example of creating a form with validation:
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:form_builder_z/models/form_entity.dart';

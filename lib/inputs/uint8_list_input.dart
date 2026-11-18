@@ -6,11 +6,12 @@ import "../models/input_entity.dart";
 
 /// Input for providing an image in [Uint8List] format
 class Uint8ListInput extends InputEntity<Uint8List?> {
-  /// Call super.pure to represent an unmodified form input.
+  /// Creates an unmodified input with an optional initial value.
   const Uint8ListInput.pure({
     required super.field,
+    super.value,
     super.validators = const [],
-  }) : super.pure(value: null);
+  }) : super.pure();
 
   /// Call super.dirty to represent a modified form input.
   const Uint8ListInput.dirty({
@@ -23,10 +24,9 @@ class Uint8ListInput extends InputEntity<Uint8List?> {
   Uint8ListInput dirty({
     Uint8List? value,
     List<BaseValidator<Uint8List?>>? validators,
-  }) =>
-      Uint8ListInput.dirty(
-        field: field,
-        value: value,
-        validators: validators ?? this.validators,
-      );
+  }) => Uint8ListInput.dirty(
+    field: field,
+    value: value,
+    validators: validators ?? this.validators,
+  );
 }

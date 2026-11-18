@@ -1,4 +1,19 @@
-## 1.0.0
+## 0.2.0
+
+* Accept optional initial `value` arguments in every specialized `.pure()`
+  constructor. Preserve pure state, validators, and existing defaults.
+* **Breaking:** Upgrade to Flutter Form Builder 11 and Material UI. Require
+  Flutter 3.47.0 / Dart 3.13.0 or later; use `material_ui` types for decorations,
+  dropdown items, date ranges, and slider ranges.
+* Add `Field.checkboxGroup<T>()` and `Field.choiceChips<T>()` with typed values,
+  model validation, conditional flags, and debug dummy values.
+* Retain errors supplied with `invalidate()` until editing or resetting the
+  field. Report registered-field errors through form errors and failure
+  callbacks; hidden fields retain errors without blocking submission.
+* Keep calculator input working through a scoped Material UI compatibility
+  bridge for its legacy Material widgets.
+
+## 0.1.0
 
 * Add opt-in `Field.currency(showCalculator: true)` calculator input through
   `flutter_simple_calculator`. Apply local calculations on Done, support

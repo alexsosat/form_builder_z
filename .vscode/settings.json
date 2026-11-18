@@ -1,5 +1,5 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/3.44.8",
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
   "i18n-ally.enabledParsers": [
     "arb"
   ],

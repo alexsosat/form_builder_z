@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:form_builder_z/example/nylo_fields_form.dart';
@@ -127,10 +127,12 @@ void main() {
     final form = NyloFieldsForm(formKey: GlobalKey<FormBuilderState>());
     final key = GlobalKey<FormWidgetState>();
     await tester.pumpWidget(host(NyloFieldsFormWidget(key: key, form: form)));
-    expect(form.formKey!.currentState!.fields.length, 13);
+    expect(form.formKey!.currentState!.fields.length, 15);
     expect(form.validate(), isTrue);
     expect(form.values['amount'], 150.75);
     expect(form.values['code'], '123456');
+    expect(form.values['contactMethods'], ['email']);
+    expect(form.values['priority'], 'normal');
     expect(key.currentState!.saveAndValidate(), isTrue);
     await tester.pump();
     expect(tester.takeException(), isNull);

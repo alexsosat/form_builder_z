@@ -1,8 +1,7 @@
 /// Base class for all validators.
 abstract class BaseValidator<T> {
   /// Creates a new instance of the validator.
-  const BaseValidator({String? errorText, this.checkNullOrEmpty = true})
-    : _errorText = errorText;
+  const BaseValidator({this._errorText, this.checkNullOrEmpty = true});
 
   /// Backing field for [errorText].
   final String? _errorText;

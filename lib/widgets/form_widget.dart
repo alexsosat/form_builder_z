@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import '../fields/field.dart';
@@ -41,8 +41,8 @@ abstract class FormWidget<T extends FormEntity> extends StatefulWidget {
     this.onChanged,
     this.submitLabel = 'Submit',
     this.submitButtonBuilder,
-  })  : assert(mainAxisSpacing >= 0),
-        assert(crossAxisSpacing >= 0);
+  }) : assert(mainAxisSpacing >= 0),
+       assert(crossAxisSpacing >= 0);
 
   final T form;
 
@@ -92,7 +92,7 @@ class FormWidgetState extends State<FormWidget> {
 
   bool get isSubmitting => _isSubmitting;
 
-  /// Model and draft conversion errors, keyed by the exact input names.
+  /// Model, draft conversion, and registered-field errors by input name.
   Map<String, String> get errors {
     final result = <String, String>{};
     for (final field in _fields) {
@@ -103,6 +103,8 @@ class FormWidgetState extends State<FormWidget> {
       if (state == null) continue;
       final error = field.validateValue(widget.form, state.value);
       if (error != null) result[field.name] = error;
+      // This also includes retained custom errors from field.invalidate().
+      if (state.errorText != null) result[field.name] = state.errorText!;
     }
     return Map.unmodifiable(result);
   }
@@ -123,8 +125,10 @@ class FormWidgetState extends State<FormWidget> {
       } else if (entry is List) {
         if (entry.isEmpty ||
             entry.any((item) => item is! Field || !item.isInput)) {
-          throw ArgumentError('Rows must be non-empty lists of input Fields. '
-              'Deeper nesting and embedded widgets in rows are unsupported.');
+          throw ArgumentError(
+            'Rows must be non-empty lists of input Fields. '
+            'Deeper nesting and embedded widgets in rows are unsupported.',
+          );
         }
         final row = entry.cast<Field>().toList();
         layout.add(row);
@@ -134,8 +138,9 @@ class FormWidgetState extends State<FormWidget> {
         shape.add('row-end');
       } else {
         throw ArgumentError(
-            'fields() accepts Fields and one-level lists of Fields. '
-            'Use Field.widget(child: ...) for ordinary widgets.');
+          'fields() accepts Fields and one-level lists of Fields. '
+          'Use Field.widget(child: ...) for ordinary widgets.',
+        );
       }
     }
     final inputNames = widget.form.inputs.map((input) => input.field).toList();
@@ -157,13 +162,16 @@ class FormWidgetState extends State<FormWidget> {
             !Iterable.generate(shape.length)
                 .every((i) => previousShape[i] == shape[i]))) {
       throw ArgumentError(
-          'Field names, types, and layout structure must stay fixed while mounted.');
+        'Field names, types, and layout structure must stay fixed while mounted.',
+      );
     }
     _layoutShape = shape;
     _layout = layout;
     _fields = fields;
-    for (final field in fields.where((field) =>
-        field.hidden || (field.readOnly && !field.supportsReadOnlySelection))) {
+    for (final field in fields.where(
+      (field) =>
+          field.hidden || (field.readOnly && !field.supportsReadOnlySelection),
+    )) {
       final name = field.name;
       if (!(_formKey.currentState?.fields[name]?.effectiveFocusNode.hasFocus ??
           false)) {
@@ -171,8 +179,9 @@ class FormWidgetState extends State<FormWidget> {
       }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        final current =
-            _fields.where((field) => field.name == name).firstOrNull;
+        final current = _fields
+            .where((field) => field.name == name)
+            .firstOrNull;
         if (current != null &&
             (current.hidden ||
                 (current.readOnly && !current.supportsReadOnlySelection))) {
@@ -266,7 +275,8 @@ class FormWidgetState extends State<FormWidget> {
         registered.length != names.length ||
         !registered.containsAll(names)) {
       throw StateError(
-          'The layout must mount every generated field exactly once.');
+        'The layout must mount every generated field exactly once.',
+      );
     }
   }
 
@@ -312,9 +322,24 @@ class FormWidgetState extends State<FormWidget> {
     _readFields();
     setState(() {});
     state.save();
-    final widgetsValid = state.validate();
+    final widgetsValid = _validateVisibleFields();
     final valid = widgetsValid && errors.isEmpty;
     if (!valid) widget.onFailure?.call(errors);
+    return valid;
+  }
+
+  bool _validateVisibleFields() {
+    var valid = true;
+    FormBuilderFieldState? firstInvalid;
+    for (final field in _fields) {
+      if (field.hidden) continue;
+      final state = _formKey.currentState!.fields[field.name]!;
+      if (!state.validate(focusOnInvalid: false)) {
+        valid = false;
+        firstInvalid ??= state;
+      }
+    }
+    firstInvalid?.focus();
     return valid;
   }
 
@@ -329,12 +354,14 @@ class FormWidgetState extends State<FormWidget> {
     try {
       await callback(values);
     } catch (error, stack) {
-      FlutterError.reportError(FlutterErrorDetails(
-        exception: error,
-        stack: stack,
-        library: 'form_builder_z',
-        context: ErrorDescription('while submitting a generated form'),
-      ));
+      FlutterError.reportError(
+        FlutterErrorDetails(
+          exception: error,
+          stack: stack,
+          library: 'form_builder_z',
+          context: ErrorDescription('while submitting a generated form'),
+        ),
+      );
     } finally {
       if (mounted && submissionRevision == _submissionRevision) {
         setState(() => _isSubmitting = false);
@@ -350,13 +377,17 @@ class FormWidgetState extends State<FormWidget> {
     super.dispose();
   }
 
-  List<Widget> _spaced(List<Widget> children, double spacing,
-      {bool horizontal = false}) {
+  List<Widget> _spaced(
+    List<Widget> children,
+    double spacing, {
+    bool horizontal = false,
+  }) {
     final result = <Widget>[];
     for (final child in children) {
       if (result.isNotEmpty) {
         result.add(
-            horizontal ? SizedBox(width: spacing) : SizedBox(height: spacing));
+          horizontal ? SizedBox(width: spacing) : SizedBox(height: spacing),
+        );
       }
       result.add(child);
     }
@@ -379,8 +410,12 @@ class FormWidgetState extends State<FormWidget> {
     _readFields();
     _claim(widget.form);
     if (_needsDummyInitialization) {
-      final seeded = _dummyValues.apply(widget.form, _fields,
-          isDebugMode: kDebugMode, enabled: widget.useDummyValues);
+      final seeded = _dummyValues.apply(
+        widget.form,
+        _fields,
+        isDebugMode: kDebugMode,
+        enabled: widget.useDummyValues,
+      );
       _needsDummyInitialization = false;
       if (seeded) {
         _lastValues = Map.of(widget.form.values);
@@ -392,17 +427,18 @@ class FormWidgetState extends State<FormWidget> {
         field.name: KeyedSubtree(
           key: _fieldKeys.putIfAbsent(field.name, () => GlobalKey()),
           child: _guardInteraction(
-              field,
-              field.buildField(
-                context,
-                form: widget.form,
-                onChanged: (_) => _onChanged(field.name),
-                validator: (value) => _fields
-                    .firstWhere((current) => current.name == field.name)
-                    .validateValue(widget.form, value),
-                formEnabled: widget.enabled,
-                autovalidateMode: widget.autovalidateMode,
-              )),
+            field,
+            field.buildField(
+              context,
+              form: widget.form,
+              onChanged: (_) => _onChanged(field.name),
+              validator: (value) => _fields
+                  .firstWhere((current) => current.name == field.name)
+                  .validateValue(widget.form, value),
+              formEnabled: widget.enabled,
+              autovalidateMode: widget.autovalidateMode,
+            ),
+          ),
         ),
     };
     final hidden = <Widget>[
@@ -418,14 +454,15 @@ class FormWidgetState extends State<FormWidget> {
             : KeyedSubtree(
                 key: _contentKeys.putIfAbsent(index, () => GlobalKey()),
                 child: _guardInteraction(
-                    entry,
-                    entry.buildField(
-                      context,
-                      form: widget.form,
-                      onChanged: (_) {},
-                      formEnabled: widget.enabled,
-                      autovalidateMode: widget.autovalidateMode,
-                    )),
+                  entry,
+                  entry.buildField(
+                    context,
+                    form: widget.form,
+                    onChanged: (_) {},
+                    formEnabled: widget.enabled,
+                    autovalidateMode: widget.autovalidateMode,
+                  ),
+                ),
               );
         if (entry.hidden) {
           if (!entry.isInput) hidden.add(child);
@@ -433,23 +470,29 @@ class FormWidgetState extends State<FormWidget> {
           children.add(child);
         }
       } else {
-        final row =
-            (entry as List<Field>).where((field) => !field.hidden).toList();
+        final row = (entry as List<Field>)
+            .where((field) => !field.hidden)
+            .toList();
         if (row.isEmpty) continue;
-        children.add(Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: _spaced([
-            for (final field in row) Expanded(child: fields[field.name]!),
-          ], widget.crossAxisSpacing, horizontal: true),
-        ));
+        children.add(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _spaced(
+              [for (final field in row) Expanded(child: fields[field.name]!)],
+              widget.crossAxisSpacing,
+              horizontal: true,
+            ),
+          ),
+        );
       }
     }
     final layout =
         widget.layoutBuilder?.call(context, List.unmodifiable(children)) ??
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: _spaced(children, widget.mainAxisSpacing));
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: _spaced(children, widget.mainAxisSpacing),
+        );
     final submit = widget.enabled && !_isSubmitting ? _submit : null;
     return KeyedSubtree(
       key: ObjectKey(widget.form),
@@ -468,25 +511,33 @@ class FormWidgetState extends State<FormWidget> {
                 offstage: true,
                 child: ExcludeFocus(
                   child: TickerMode(
-                      enabled: false,
-                      child: Column(
-                          mainAxisSize: MainAxisSize.min, children: hidden)),
+                    enabled: false,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: hidden,
+                    ),
+                  ),
                 ),
               ),
               ..._spaced([
                 if (widget.header != null) widget.header!,
                 layout,
                 if (widget.onSubmit != null)
-                  widget.submitButtonBuilder
-                          ?.call(context, submit, _isSubmitting) ??
+                  widget.submitButtonBuilder?.call(
+                        context,
+                        submit,
+                        _isSubmitting,
+                      ) ??
                       ElevatedButton(
                         onPressed: submit,
                         child: _isSubmitting
                             ? const SizedBox(
                                 width: 20,
                                 height: 20,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2))
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
                             : Text(widget.submitLabel),
                       ),
                 if (widget.footer != null) widget.footer!,
